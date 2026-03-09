@@ -1,0 +1,38 @@
+Layer 2 Security
+
+Step 2: Assign Central as the primary root bridge. Using the spanning-tree vlan 1 root 
+primary command, and assign Central as the root bridge.  
+
+Central(config)# spanning-tree vlan 1 root primary  
+
+SW-1(config)# spanning-tree vlan 1 
+root secondary 
+
+end user (PC)
+SW-A(config)# interface range f0/1 - 4  
+SW-A(config-if-range)# spanning-tree portfast  
+
+
+SWA and SWB
+interface range f0/2-5  
+spanning-tree bpduguard enable 
+
+switch 1 and 2
+interface range f0/2, fa0/3 , fa0/4 ,fa0/6 , fa0/7  
+spanning-tree guard root
+
+
+interface range f0/1 - 22  
+switchport mode access  
+switchport port-security  
+switchport port-security maximum 2  
+switchport port-security violation shutdown 
+switchport port-security mac-address sticky  
+
+
+
+interface range f0/7 - 22  
+shutdown 
+
+
+show port-security interface f0/2

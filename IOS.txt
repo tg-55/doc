@@ -1,0 +1,56 @@
+R1# mkdir ipsdir  
+
+R1(config)# ip ips config location flash:ipsdir  
+  
+R1(config)# ip ips name iosips  
+
+R1(config)# ip ips notify log  
+
+ show run 
+command.  
+
+Enable the timestamp service if it is not enabled.  
+R1(config)# service timestamps log datetime msec  
+d. Send log messages to the syslog server at IP address 192.168.1.50. 
+R1(config)# logging host 192.168.1.50  
+
+R1(config)# ip ips signature category  
+R1(config-ips-category)# category all  
+R1(config-ips-category-action)# retired true  
+R1(config-ips-category-action)# exit  
+R1(config-ips-category)# category ios_ips basic  
+R1(config-ips-category-action)# retired false  
+R1(config-ips-category-action)# exit  
+R1(config-ips-cateogry)# exit  
+
+Do you want to accept these changes? [confirm] <Enter>  
+
+Step 8: Apply the IPS rule to an interface.  
+
+Apply the IPS rule to an interface 
+R1(config)# interface g0/1  
+R1(config-if)# ip ips iosips out 
+
+2: Modify the Signature  
+Step 1: Change the event-action of a signature.  
+Un-retire the echo request signature (signature 2004, subsig ID 0), enable it, and change the signature action 
+to alert and drop. 
+ 
+R1(config)# ip ips signature-definition  
+R1(config-sigdef)# signature 2004 0  
+R1(config-sigdef-sig)# status  
+R1(config-sigdef-sig-status)# retired false  
+R1(config-sigdef-sig-status)# enabled true  
+R1(config-sigdef-sig-status)# exit  
+
+Configure IOS Intrusion Prevention System (IPS) using CLI  
+R1(config-sigdef-sig)# engine  
+R1(config-sigdef-sig-engine)# event-action produce-alert 
+R1(config-sigdef-sig-engine)# event-action deny-packet-inline  
+R1(config-sigdef-sig-engine)# exit  
+R1(config-sigdef-sig)# exit  
+R1(config-sigdef)# exit  
+
+Do you want to accept these changes? [confirm] <Enter>  
+Step 2: Use show commands to verify IPS.  
+Use the show ip ips all c
